@@ -1,0 +1,38 @@
+import Fastify from 'fastify'
+import cors from '@fastify/cors';
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient({
+  log: ['query']
+})
+
+
+await fastify.register(cors, {
+  origin: true,
+});
+
+
+async function bootstrap() {
+
+  const fastify = Fastify({
+    logger: true,
+  });
+
+  fastify.get('/pools/count', async () => {
+
+    const pools = await prisma.pool.findMany({
+      where: {
+        title: {
+          startsWith: 'A'
+        }
+      }
+    })
+
+    return { pools };
+  })
+
+  await fastify.listen({ port: 3333 });
+
+}
+
+bootstrap();

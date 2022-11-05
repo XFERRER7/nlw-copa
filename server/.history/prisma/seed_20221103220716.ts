@@ -1,0 +1,1 @@
+import { prs } from '@prisma/client'
